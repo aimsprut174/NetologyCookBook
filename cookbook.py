@@ -19,4 +19,20 @@ with open('cook_book.txt', encoding='utf-8') as f:
                 value.append(dict_ingredient)
         cook_book[dish[0]] = value
 
-print(cook_book)
+def get_shop_list_by_dishes(dishes, person_count):
+    finish_dict = {}
+    for dish in dishes:
+        if dish in cook_book:
+            for dict_ingred in cook_book[dish]:
+                if dict_ingred['ingredient_name'] not in finish_dict:
+                    finish_dict[dict_ingred['ingredient_name']] = dict(measure=dict_ingred['measure'], quantity=int(
+                        dict_ingred['quantity']) * person_count)
+                else:
+                    finish_dict[dict_ingred['ingredient_name']] = dict(measure=dict_ingred['measure'], quantity=int(
+                        dict_ingred['quantity']) * person_count + finish_dict[dict_ingred['ingredient_name']].pop(
+                        'quantity'))
+
+        else:
+            return f'Неверно введено название блюда'
+    return finish_dict
+pprint(get_shop_list_by_dishes(['Фахитос', 'Утка по-пекински'], 5))
